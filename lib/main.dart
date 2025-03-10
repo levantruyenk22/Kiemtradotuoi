@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -11,7 +11,14 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: AgeCheckerScreen(),
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+        textTheme: const TextTheme(
+          bodyLarge: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          bodyMedium: TextStyle(fontSize: 16),
+        ),
+      ),
+      home: const AgeCheckerScreen(),
     );
   }
 }
@@ -34,55 +41,69 @@ class _AgeCheckerScreenState extends State<AgeCheckerScreen> {
 
     if (name.isEmpty || age == null) {
       setState(() {
-        result = "Vui lòng nhập thông tin hợp lệ";
+        result = "Vui lòng nhập thông tin hợp lệ!";
       });
       return;
     }
 
-    String category;
-    if (age < 2) {
-      category = "Em bé";
-    } else if (age < 6) {
-      category = "Trẻ em";
-    } else if (age <= 65) {
-      category = "Người lớn";
-    } else {
-      category = "Người già";
-    }
-
     setState(() {
-      result = "$name thuộc nhóm: $category";
+      if (age < 18) {
+        result = "$name, bạn là trẻ vị thành niên.";
+      } else {
+        result = "$name, bạn là người trưởng thành.";
+      }
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Thực hành 01')),
+      appBar: AppBar(
+        title: const Text("Kiểm Tra Độ Tuổi"),
+        centerTitle: true,
+      ),
       body: Padding(
-        padding: EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(20.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             TextField(
               controller: nameController,
-              decoration: InputDecoration(labelText: 'Họ và tên'),
+              decoration: InputDecoration(
+                labelText: "Tên của bạn",
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
             ),
+            const SizedBox(height: 16),
             TextField(
               controller: ageController,
-              decoration: InputDecoration(labelText: 'Tuổi'),
               keyboardType: TextInputType.number,
+              decoration: InputDecoration(
+                labelText: "Tuổi của bạn",
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             ElevatedButton(
               onPressed: checkAgeCategory,
-              child: Text('Kiểm tra'),
+              style: ElevatedButton.styleFrom(
+                padding: const EdgeInsets.symmetric(vertical: 15),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+              child: const Text("Kiểm tra", style: TextStyle(fontSize: 18)),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             Text(
               result,
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               textAlign: TextAlign.center,
+              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.blue),
             ),
           ],
         ),
